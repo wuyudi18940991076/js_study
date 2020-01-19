@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>menu_tree</title>
+  <link rel="stylesheet" href="./menu_tree.css">
+</head>
+
+<body>
+  <h1>点击下面的来了解中国春节吧</h1>
+  <div class="menu_tree">
+    <ul class="menu">
+      <li class="click" id="one_btn">春节由来</li>
+      <li id="two_btn">春节介绍</li>
+      <li id="three_btn">春节习俗</li>
+    </ul>
+    <p class="menu_content" id="menu_one" style="display: block;">
+      春节，即农历新年，是一年之岁首、传统意义上的年节。俗称新春、新年、新岁、岁旦、年禧、大年等，口头上又称度岁、庆岁、过年、过大年。春节历史悠久，由上古时代岁首祈年祭祀演变而来。万物本乎天、人本乎祖，祈年祭祀、敬天法祖，报本反始也。春节的起源蕴含着深邃的文化内涵，在传承发展中承载了丰厚的历史文化底蕴。在春节期间，全国各地均有举行各种庆贺新春活动，带有浓郁的各地域特色，热闹喜庆的气氛洋溢；这些活动以除旧布新、驱邪攘灾、拜神祭祖、纳福祈年为主要内容，形式丰富多彩，凝聚着中华传统文化精华。
+    </p>
+    <p class="menu_content" id="menu_two">
+      在古代民间，人们从年末廿三或廿四的祭灶便开始“忙年”了，新年到正月十九日才结束。在现代，人们把春节定于农历正月初一，但一般至少要到正月十五新年才算结束。节日交流问候传递着亲朋乡里之间的亲情伦理，它是人们增深感情的重要节日，是个欢乐祥和、亲朋好友欢聚的传统佳节。
+    </p>
+    <p class="menu_content" id="menu_three">
+      百节年为首，春节是中华民族最隆重的传统佳节，它不仅集中体现了中华民族的思想信仰、理想愿望、生活娱乐和文化心理，而且还是祈福攘灾、饮食和娱乐活动的狂欢式展示。受到中华文化的影响，世界上一些国家和地区也有庆贺新春的习俗。据不完全统计，已有近20个国家和地区把中国春节定为整体或者所辖部分城市的法定节假日。春节与清明节、端午节、中秋节并称为中国四大传统节日。春节民俗经国务院批准列入第一批国家级非物质文化遗产名录。
+    </p>
+  </div>
+  <script>
+    var one_btn = document.getElementById('one_btn');
+    var two_btn = document.getElementById('two_btn');
+    var three_btn = document.getElementById('three_btn');
+    one_btn.onclick = function () {
+      one_btn.className = 'click';
+      two_btn.className = '';
+      three_btn.className = '';
+      document.getElementById('menu_one').style.display = 'block';
+      document.getElementById('menu_two').style.display = 'none';
+      document.getElementById('menu_three').style.display = 'none';
+    };
+    two_btn.onclick = function () {
+      two_btn.className = 'click';
+      one_btn.className = '';
+      three_btn.className = '';
+      document.getElementById('menu_two').style.display = 'block';
+      document.getElementById('menu_one').style.display = 'none';
+      document.getElementById('menu_three').style.display = 'none';
+    };
+    three_btn.onclick = function () {
+      three_btn.className = 'click';
+      one_btn.className = '';
+      two_btn.className = '';
+      document.getElementById('menu_two').style.display = 'none';
+      document.getElementById('menu_one').style.display = 'none';
+      document.getElementById('menu_three').style.display = 'block';
+    };
+
+    function menu_change(class_name, style_dis) {
+      if (this.class_name = 'click') {
+        this.style_dis.style.display = "block";
+      } else if (this.class_name = '') {
+        this.style_dis.style.display = "none";
+      }
+    }
+
+    // function click_menu(arr,val){
+    //   for(var i = 0; i< arr.length; i ++){
+
+    //   }
+    // }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>event</title>
+  <style>
+    .wrapper {
+      width: 300px;
+      height: 300px;
+      background-color: aquamarine;
+    }
+
+    .content {
+      width: 200px;
+      height: 200px;
+      background-color: rgb(194, 140, 54);
+    }
+
+    .box {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      /* writing-mode: vertical-rl; */
+      /* 上面是为了控制文档流F */
+    }
+  </style>
+</head>
+
+<body>
+  <ul>
+    <li>a</li>
+    <li>a</li>
+    <li>a</li>
+    <li>a</li>
+  </ul>
+  <div style="width: 100px;height: 100px;background-color: aquamarine;"></div>
+  <script>
+    // 用逗号隔开都是局部变量，分号的话只有第一个是局部变量剩下的都是全局变量
+    // 下面的就相当于var了一个liCol 和len的意思
+    var liCol = document.getElementsByTagName('li'),
+      len = liCol.length;
+    for (var i = 0; i < len; i++) {
+      (function (i) {
+        liCol[i].addEventListener('click', function () {
+          console.log('a')
+        }, false)
+      }(i))
+    }
+    // 封装处理不同浏览器的兼容性的事件处理函数方法
+    //               事件，事件处理类型，事件处理函数
+    function addEvent(elem, type, handle) {
+      if (elem.addEventListener) {
+        elem.addEventListener(type, handle, false);
+      } else if (elem.addEventListener) {
+        elem.addEventListener('on' + type, function () {
+          handle.call(elem);
+        })
+      } else {
+        elem['on' + type] = handle;
+      }
+    }
+
+    // 解除事件处理(可以应用在一个事点一次生效，点第二次就不好用了)
+    var div = document.getElementsByTagName('div')[0];
+    div.onclick = function () {
+      console.log('a');
+      this.onclick = null;
+    }
+    // div.onclick = null;
+    var div = document.getElementsByTagName('div')[0];
+    div.addEventListener('click', test, false);
+
+    function test() {
+      console.log('a');
+    }
+    // div.removeEventListener('click', test, false);
+  </script>
+
+  <!-- // 事件处理模型 -->
+  <!-- 事件冒泡是非视觉上结构上的子元素冒向父元素 -->
+  <div class="wrapper">
+    <div class="content">
+      <div class="box"></div>
+    </div>
+  </div>
+  <script>
+    var wrapper = document.getElementsByClassName('wrapper')[0];
+    var content = document.getElementsByClassName('content')[0];
+    var box = document.getElementsByClassName('box')[0];
+    // 事件捕获
+    wrapper.addEventListener('click', function () {
+      console.log('wrapper');
+    }, true)
+    content.addEventListener('click', function () {
+      console.log('content');
+    }, true)
+    box.addEventListener('click', function () {
+      console.log('box');
+    }, true)
+
+    // 事件冒泡
+    wrapper.addEventListener('click', function () {
+      console.log('wrapperBubble');
+    }, false)
+    content.addEventListener('click', function () {
+      console.log('contentBubble');
+    }, false)
+    box.addEventListener('click', function () {
+      console.log('boxBubble');
+    }, false)
+
+    // 事件正常是先捕获后冒泡，但是当两个事件同时开始就是先执行那个就是那个在前面f
+    // box.addEventListener('click', function () {
+    //   console.log('box');
+    // }, true)这里变成true它的事件处理模型就立刻变成事件捕获了，其实就是传递顺序相反，先是显示最外层的
+
+
+    // focus, blur,change,submit,reset，select等事件不冒泡
+    //聚焦事件 
+    document.getElementsByTagName('div')[0];
+    div.onclick = function (e) {
+      e.stopPropagation(); //用来阻止事件冒泡，取消冒泡事件
+
+      e.cancelBubble = true; //取消冒泡，ie独有，最近谷歌也实现了
+    }
+
+
+
+
+
+    // 封装一个可以兼容所有浏览器的一种阻止事件冒泡的方法
+    document.getElementsByTagName('div')[0];
+    div.onclick = function (e) {
+      stopBubble(e);
+    }
+
+    function stopBubble(event) {
+      if (event.stopPropagation) {
+        event.stopPropagation();
+      } else {
+        event.cancelBubble = true;
+      }
+    }
+
+
+
+    // 右键出菜单的默认事件事件
+    document.oncontextMenu = function () {
+      return false; //兼容性非常好的一种阻止默认事件的方法f，句柄的方式，
+    }
+
+    document.oncontextMenu = function (e) {
+      e.preventDefault(); //w3c标准。ie9不支持
+      e.returnValue = false; //兼容ie
+    }
+
+
+    // 封装一个兼容性好的阻止默认事件的方法
+    function cancelHandler(event) {
+      if (e.preventDefault) {
+        e.preventDefault();
+      } else {
+        e.returnValue = false;
+      }
+    }
+
+
+    div.onclick = function (e) {
+      var event = e || window.event; //在ie中window.event相当于e作为传递的事件对象的框
+    }
+
+
+    // 事件委托就是利用事件冒泡，和事件原对象进行处理
+
+
+    // 三个事件，为了写拖拽，
+    // onmouseenter onmouseleave onmousemove
+    //        over          out   是老版本
+
+
+
+
+    document.onmousemove = function (e) {
+      var event = e || window.event;
+      console.log(e.pageX + "" + e.pageY)
+    }
+  </script>
+  <br><br>
+  <h1 style="color: brown;">上面的只有打开控制台才能展现的</h1>
+  <h2>下面的是js代码</h2>
+
+  <pre>
+  // 用逗号隔开都是局部变量，分号的话只有第一个是局部变量剩下的都是全局变量
+  // 下面的就相当于var了一个liCol 和len的意思
+  var liCol = document.getElementsByTagName('li'),
+    len = liCol.length;
+  for (var i = 0; i < len; i++) {
+    (function (i) {
+      liCol[i].addEventListener('click', function () {
+        console.log('a')
+      }, false)
+    }(i))
+  }
+  // 封装处理不同浏览器的兼容性的事件处理函数方法
+  //               事件，事件处理类型，事件处理函数
+  function addEvent(elem, type, handle) {
+    if (elem.addEventListener) {
+      elem.addEventListener(type, handle, false);
+    } else if (elem.addEventListener) {
+      elem.addEventListener('on' + type, function () {
+        handle.call(elem);
+      })
+    } else {
+      elem['on' + type] = handle;
+    }
+  }
+
+  // 解除事件处理(可以应用在一个事点一次生效，点第二次就不好用了)
+  var div = document.getElementsByTagName('div')[0];
+  div.onclick = function () {
+    console.log('a');
+    this.onclick = null;
+  }
+  // div.onclick = null;
+  var div = document.getElementsByTagName('div')[0];
+  div.addEventListener('click', test, false);
+
+  function test() {
+    console.log('a');
+  }
+  // div.removeEventListener('click', test, false);
+
+
+// 事件处理模型 -->
+事件冒泡是非视觉上结构上的子元素冒向父元素 -->
+
+  var wrapper = document.getElementsByClassName('wrapper')[0];
+  var content = document.getElementsByClassName('content')[0];
+  var box = document.getElementsByClassName('box')[0];
+  // 事件捕获
+  wrapper.addEventListener('click', function () {
+    console.log('wrapper');
+  }, true)
+  content.addEventListener('click', function () {
+    console.log('content');
+  }, true)
+  box.addEventListener('click', function () {
+    console.log('box');
+  }, true)
+
+  // 事件冒泡
+  wrapper.addEventListener('click', function () {
+    console.log('wrapperBubble');
+  }, false)
+  content.addEventListener('click', function () {
+    console.log('contentBubble');
+  }, false)
+  box.addEventListener('click', function () {
+    console.log('boxBubble');
+  }, false)
+
+  // 事件正常是先捕获后冒泡，但是当两个事件同时开始就是先执行那个就是那个在前面f
+  // box.addEventListener('click', function () {
+  //   console.log('box');
+  // }, true)这里变成true它的事件处理模型就立刻变成事件捕获了，其实就是传递顺序相反，先是显示最外层的
+
+
+  // focus, blur,change,submit,reset，select等事件不冒泡
+  //聚焦事件 
+  document.getElementsByTagName('div')[0];
+  div.onclick = function (e) {
+    e.stopPropagation(); //用来阻止事件冒泡，取消冒泡事件
+
+    e.cancelBubble = true; //取消冒泡，ie独有，最近谷歌也实现了
+  }
+
+
+
+
+
+  // 封装一个可以兼容所有浏览器的一种阻止事件冒泡的方法
+  document.getElementsByTagName('div')[0];
+  div.onclick = function (e) {
+    stopBubble(e);
+  }
+
+  function stopBubble(event) {
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    } else {
+      event.cancelBubble = true;
+    }
+  }
+
+
+
+  // 右键出菜单的默认事件事件
+  document.oncontextMenu = function () {
+    return false; //兼容性非常好的一种阻止默认事件的方法f，句柄的方式，
+  }
+
+  document.oncontextMenu = function (e) {
+    e.preventDefault(); //w3c标准。ie9不支持
+    e.returnValue = false; //兼容ie
+  }
+
+
+  // 封装一个兼容性好的阻止默认事件的方法
+  function cancelHandler(event) {
+    if (e.preventDefault) {
+      e.preventDefault();
+    } else {
+      e.returnValue = false;
+    }
+  }
+
+
+  div.onclick = function (e) {
+    var event = e || window.event; //在ie中window.event相当于e作为传递的事件对象的框
+  }
+
+
+  // 事件委托就是利用事件冒泡，和事件原对象进行处理
+
+
+  // 三个事件，为了写拖拽，
+  // onmouseenter onmouseleave onmousemove
+  //        over          out   是老版本
+
+
+
+
+  document.onmousemove = function (e) {
+    var event = e || window.event;
+    console.log(e.pageX + "" + e.pageY)
+  }
+</pre>
+
+</body>
+
+</html>

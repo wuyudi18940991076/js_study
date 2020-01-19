@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>event2</title>
+  <style>
+    input {
+      border: 1px solid #01f;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="width: 100px;height: 100px;background-color: aquamarine; position: absolute;left: 0;top: 0;">鼠标点击方块就会移动
+  </div>
+  <script>
+    var div = document.getElementsByTagName('div')[0];
+    var disX,
+      disY;
+    div.onmousedown = function (e) {
+      disX = e.pageX - parseInt(div.style.left);
+      disY = e.pageY - parseInt(div.style.top);
+      document.onmousemove = function (e) {
+        var event = e || window.event; //为了兼容
+        // console.log(e.pageX + "" + e.pageY);
+        div.style.left = e.pageX - disX + "px";
+        div.style.top = e.pageY - disY + "px";
+      }
+      document.onmouseup = function () {
+        div.onmousemove = null;
+      }
+    }
+  </script>
+
+  <h2 style="margin-top: 150px;">鼠标事件</h2>
+  <pre>
+    click 点击
+    mousedown 点下
+    mousemove 移动
+    mouseup 抬起
+    contextmenu 右键产生菜单事件,用于右键取消菜单事件
+    mouseover 当鼠标移入该区域  相当于mouseenter
+    mouseout  当鼠标移出该区域  相当于mouseleave
+  </pre>
+
+  <p style="width: 100px;height: 100px;background-color: bisque;margin-top: 10px;">鼠标移上移出变色</p>
+  <script>
+    var p = document.getElementsByTagName('p')[0];
+    p.onmouseenter = function () {
+      p.style.background = 'red';
+    }
+    p.onmouseleave = function () {
+      p.style.background = 'yellow'
+    }
+  </script>
+  <h2>用button来区分鼠标的按键</h2>
+  <pre>
+    通过e.button来判断是左键右键还是中间的滚轮
+    当e(事件源对象).button ==0是左
+    当e(事件源对象).button ==1是中间滚轮
+    当e(事件源对象).button ==2是右
+
+    注意click事件是右键不能触发的，他只能监听左键，能监听的只有mousedown和mouseup
+  </pre>
+
+  <h2>下面的代码是判断是点击事件还是拖拽事件</h2>
+  <pre>
+    var firstTime = 0;
+    var lastTime = 0;
+    var key = false;
+    document.onmousedown = function () {
+      firstTime = new Date().getTime();
+    }
+    document.onmouseup = function () {
+      lastTime = new Date().getTime();
+      if (lastTime - firstTime < 300) {
+        key = true
+      }
+    }
+    document.onclick = function () {
+      if (key) {
+        console.log('click');
+        key = false;
+      }
+    }
+  </pre>
+
+  <script>
+    var firstTime = 0;
+    var lastTime = 0;
+    var key = false;
+    document.onmousedown = function () {
+      firstTime = new Date().getTime();
+    }
+    document.onmouseup = function () {
+      lastTime = new Date().getTime();
+      if (lastTime - firstTime < 300) {
+        key = true
+      }
+    }
+    document.onclick = function () {
+      if (key) {
+        console.log('click');
+        key = false;
+      }
+    }
+  </script>
+
+
+
+  <h2>键盘类事件</h2>
+  <pre>
+  <strong>keydown</strong>
+  <strong>keyup</strong>
+  <strong>keypress</strong>
+  顺序：keydown > keypress > keyup 
+  keydown 和 keypress类似，但是它俩的区别：
+  keydown可以响应任意键盘按键，keypress只可以响应字符类键盘按钮
+  keypress返回ASCII码，可以转换成响应字符串
+</pre>
+
+  <h2>文本类事件</h2>
+  <pre>
+    <strong>oninput</strong>只要里面的内容有变化都会触发input事件
+    <strong>onfocus</strong>
+    <strong>onblur</strong>
+    <strong>onchange</strong>鼠标聚焦和失去焦点是有没有改变，当失去焦点并且改变时才会触发
+  </pre>
+  <input type="text" value="请输入用户名" style="color: #ddd;"
+    onfocus="if(this.value =='请输入用户名'){this.value='';this.style.color='#424242'}"
+    onblur="if(this.value==''){this.value = '请输入用户名';this.style.color='#ddd'}">
+  <script>
+    var input = document.getElementsByTagName('input')[0];
+    input.oninput = function () {
+      console.log(this.value);
+    }
+  </script>
+
+  <h2>事件分类</h2>
+  <pre>
+    <strong>窗体操作类（window上的事件）</strong>
+    <strong>scroll load</strong>
+    滚动条的位置
+  </pre>
+  <script>
+    window.onscroll = function () {
+      // ie6没有fixed定位
+      console.log(window.pageXOffset + "" + window.pageYOffset);
+    }
+  </script>
+
+  <h4>load</h4>
+  <script>
+    window.onload = function () {
+      console.log('尽量不要用')
+    }
+  </script>
+</body>
+
+</html>

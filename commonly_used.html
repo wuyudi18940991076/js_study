@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="width: 666px;margin:30px auto;">
+    <h1>一些常用的封装方法</h1>
+    <h2>1.数组按照指定长度拆分</h2>
+    <pre>
+    // 数组按指定长度拆分
+    export function chunk (data, count) {
+      var result = []
+      for (var i = 0, len = data.length; i < len; i += count) {
+        result.push(data.slice(i, i + count))
+      }
+      return result
+    }
+  </pre>
+    <h2>2.删除数组中指定元素</h2>
+    <pre>
+    /**
+    * 删除数组中指定元素
+    * @param arr
+    * @param val
+    */
+      function removeByValue (arr, val) {
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i] == val) {
+            arr.splice(i, 1)
+            break
+          }
+        }
+      }
+  </pre>
+    <h2>3.将小数指定到精确位置</h2>
+    <pre>
+    /**
+    *  将小数字符串精确到指定位数
+    * @param num string 字符串类型的小数
+    * @param index int 精确到小数点第几位
+    */
+    function roundFloat (num, index) {
+      return Number(num).toFixed(index)
+    }
+  </pre>
+    <h2>4.根据微妙时间戳获取年月日时分秒</h2>
+    <pre>
+    /**
+    *  根据微妙时间戳获取年月日时分秒
+    * @param microtime unix微妙时间戳
+    * @returns {string} yyyy-mm-dd hh:mm:ss
+    */
+    function getNowFormatDate (microtime) {
+      var date = new Date(microtime)
+      var month = date.getMonth() + 1
+      var strDate = date.getDate()
+      var strHour = date.getHours()
+      var strMinute = date.getMinutes()
+      var strSeconds = date.getSeconds()
+      if (month >= 1 && month <= 9) {
+        month =`0${month}`
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = `0${strDate}`
+      }
+      if (strHour >= 0 && strHour <= 9) {
+        strHour = `0${strHour}`
+      }
+      if (strMinute >= 0 && strMinute <= 9) {
+        strMinute = `0${strMinute}`
+      }
+      if (strSeconds >= 0 && strSeconds <= 9) {
+        strSeconds = `0${strSeconds}`
+      }
+    var currentdate =`${date.getFullYear()}-${month }-${strDate} ${strHour}:${strMinute}:${strSeconds}`
+    return currentdate
+    }
+  </pre>
+    <h2>5.获取指定日的当周周一</h2>
+    <pre>
+    /**
+    * 获取指定日的当周周一
+    * @param time 毫秒时间戳
+    * @returns {string}
+    */
+    function getMonday (time) {
+      let today = new Date(time).getDay() === 0 ? 7 : new Date(time).getDay()
+      let timeStr = new Date(time).getTime()
+      let mondayStr = timeStr - (today - 1) * 3600 * 24 * 1000
+      return getNowFormatDate(mondayStr).split(' ')[0] + ' 00:00:00'
+    }
+  </pre>
+    <h2>6.获取指定日的当周周日</h2>
+    <pre>
+    /**
+    * 获取指定日的当周周日
+    * @param time 毫秒时间戳
+    * @returns {string}
+    */
+    function getSunday (time) {
+      let today = new Date(time).getDay() === 0 ? 7 : new Date(time).getDay()
+      let timeStr = new Date(time).getTime()
+      let sundayStr = timeStr + (7 - today) * 3600 * 24 * 1000
+      return getNowFormatDate(sundayStr).split(' ')[0] + ' 23:59:59'
+    }
+  </pre>
+    <h2>7.二维数组分组排序</h2>
+    <pre>
+    /*
+    @params arr 要排序的数组
+    @params group 要分组的键
+    */
+    function arrayGroupby (arr, key) {
+      var result = {}
+      arr.forEach(function (child, i) {
+        if (!(child[key] in result)) {
+          result[child[key]] = []
+        }
+        result[child[key]].push(child)
+      })
+      return result
+    }
+  </pre>
+    <h2>8.输入正确的数值</h2>
+    <pre>
+    /**
+    * 输出正确的数值
+    * @param val
+    * @param changedVal
+    * @returns {Number}
+    */
+    function echoTrueNumber (val, changedVal) {
+      if (val === 0 || val === '0') {
+        return parseFloat(val)
+      }
+      return val ? parseFloat(val) : changedVal
+    }
+  </pre>
+    <h2>9.根据数字字符串获取小数位位数</h2>
+    <pre>
+    /**
+    * 根据数字字符串获取小数位位数
+    * @param num
+    * @returns {number}
+    */
+    function getIndexLength (num) {
+      num = Number(num).toString()
+      let length = 0
+      if (typeof num.split('.')[1] === 'undefined') {
+        if (num.indexOf('-') > 0) {
+          // 0.0000001,1e-7科学计数法
+          length = Number(num.split('-')[1])
+        } else {
+          // 整数
+          length = 0
+        }
+      } else {
+        // 普通的小数0.121562
+        length = num.split('.')[1].length
+      }
+
+      return length
+    }
+  </pre>
+    <h2>10.去字符串所有空格</h2>
+    <pre>
+    /**
+    * 去掉字符串所有空格
+    * @param {String} Str 
+    */
+    //去字符串所有空格
+    function stringTrim(Str) {
+      return Str.replace(/(^\s+)|(\s+$)/g, '')
+    }
+  </pre>
+    <h2>11.数组去重</h2>
+    <pre>
+    */
+    function arrayUnique(arr) {
+      var newArr = []
+      for (var i = 0, len = arr.length; i < len; i++) {
+        for (var j = i + 1; j < len; j++) {
+          if (arr[i] === arr[j]) {
+            //获取没重复的最右一值放入新数组
+            ++i
+          }
+        }
+        newArr.push(arr[i])
+      }
+      return newArr
+    }
+  </pre>
+    <h2>12.判断是pc端还是移动</h2>
+    <pre>
+    function IsPC() {
+      let userAgentInfo = navigator.userAgent
+      let Agents = [
+        'Android',
+        'iPhone',
+        'SymbianOS',
+        'Windows Phone',
+        'iPad',
+        'iPod'
+      ]
+      let flag = true
+      for (let v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+          flag = false
+          break
+        }
+      }
+      return flag
+    }
+    
+    
+    //判断手机端域名
+    export const DeviceState = (function Device() {
+      if (window.location.host.slice(0, 1) === 'm' || !IsPC()) {
+        console.log("手机端")
+        return true
+      } else {
+        console.log("pc端")
+        return false
+      }
+    })()
+  </pre>
+  </div>
+</body>
+
+</html>
