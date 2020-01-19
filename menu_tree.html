@@ -7,6 +7,74 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>menu_tree</title>
   <link rel="stylesheet" href="./menu_tree.css">
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    h1 {
+      line-height: 60px;
+      color: coral;
+      text-align: center;
+    }
+
+    .menu_tree {
+      width: 800px;
+      margin: 100px auto;
+      border: 1px solid #f1f1f1;
+      background: url('./chun.jpg')no-repeat;
+      background-size: 100%;
+    }
+
+    .menu {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .menu li {
+      width: calc(100% / 3);
+      text-align: center;
+      color: rgb(239, 243, 9);
+      font-size: 20px;
+      line-height: 50px;
+      font-weight: 500;
+      list-style: none;
+      border-bottom: 1px solid #dedede;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .menu .click {
+      color: #fff;
+      background-color: red;
+      font-weight: 700;
+    }
+
+    .menu li::before {
+      position: absolute;
+      content: '';
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 50px;
+      background-color: #f1f1f1;
+    }
+
+    .menu li:last-child::before {
+      width: 0;
+      height: 0;
+    }
+
+    .menu_content {
+      color: #f8e808;
+      font-size: 16px;
+      height: 200px;
+      text-indent: 32px;
+      padding: 30px 30px;
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
